@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "516174243814",
+    "firebase_url": "https://mindmap-3a67c-default-rtdb.firebaseio.com",
+    "project_id": "mindmap-3a67c",
+    "storage_bucket": "mindmap-3a67c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516174243814:android:859ed165627d73bce5d827",
+        "android_client_info": {
+          "package_name": "kameo.kameo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXWWSUu51m0Num26flk1Fw_kbkFMDZGvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
