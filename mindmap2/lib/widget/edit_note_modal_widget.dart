@@ -3,70 +3,55 @@ import 'package:mindmap2/model/note.dart';
 import 'package:mindmap2/provider/note_provider.dart';
 import 'package:provider/provider.dart';
 
-class EditNoteModal extends StatefulWidget {
+class EditNoteModal extends StatelessWidget {
   final Note note;
+  final TextEditingController titleController;
+  final TextEditingController contentController;
 
-  const EditNoteModal({super.key, required this.note});
-
-  @override
-  State<EditNoteModal> createState() => _EditNoteModalState();
-}
-
-class _EditNoteModalState extends State<EditNoteModal> {
-  late TextEditingController _titleController;
-  late TextEditingController _contentController;
-
-  @override
-  void initState () {
-    super.initState();
-    _titleController = TextEditingController(text: widget.note.title);
-    _contentController = TextEditingController(text: widget.note.content);
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _contentController.dispose();
-    super.dispose();
-  }
-
-  void _saveNote (){
-    final updateNote = Note(
-      id: widget.note.id,
-      title: _titleController.text,
-      content: _contentController.text
-    );
-
-    Provider.of<NoteProvider>(context, listen: false).updateNoteInFirebase(updateNote);
-    Navigator.of(context).pop();
-  }
-
+  EditNoteModal({super.key, required this.note})
+    : titleController =  TextEditingController(text: note.title),
+      contentController = TextEditingController(text: note.content);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: InputDecoration(labelText: 'Context')
-          ),
-          SizedBox(height:8),
-          TextField(
-            controller: _contentController,
-            decoration: InputDecoration(labelText: 'Content'),
-            maxLines: 5,
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _saveNote,
-            child: Text('Save')
-          )
+    return AlertDialog(
+      title: Text('Edit NOte'),
+      content: SingleChildScrollView(
+        child:Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(labelText: 'Title'),
+            ),
+            TextField(
+              controller: contentController,
+              decoration: InputDecoration(labelText: 'Content'),
+              maxLines: null,
 
-        ],
-      )
+            )
+          ],
+        )
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            print(context);
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancel')
+        ),
+        ElevatedButton(
+          onPressed: () {
+            print(context);
+            note.title = titleController.text;
+            note.content = contentController.text;
+            Provider.of<NoteProvider>(context, listen: false).updateNoteInFirebase(note);
+            Navigator.of(context).pop();
+          },
+          child: Text('Save')
+        )
+      ],
     );
   }
 }

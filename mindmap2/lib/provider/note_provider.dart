@@ -5,12 +5,25 @@ import 'package:mindmap2/model/note.dart';
 
 class NoteProvider with ChangeNotifier {
   List<Note> _notes = [];
-
+  Note? _selectedNote;
 
   List<Note> get notes => _notes;
 
   noteProvider() {
     fetchNotes();
+  }
+
+  Note? get selectedNote => _selectedNote;
+
+  void setSelectedNote (Note note) {
+    print('selectedButton pushed');
+    _selectedNote = note;
+    notifyListeners();
+  }
+
+  void clearSelectedNote () {
+    _selectedNote = null;
+    notifyListeners();
   }
 
   Future<void> fetchNotes () async {
@@ -21,29 +34,23 @@ class NoteProvider with ChangeNotifier {
   }
 
   Future<void> addNoteToFirebase(Note note) async {
-    await FirebaseFirestore.instance.collection('notes').add({
-      'title': note.title,
-      'content': note.content,
-    });
+    await FirebaseFirestore.instance.collection('notes').add(note.toMap());
     fetchNotes();
   }
 
   Future<void> updateNoteInFirebase(Note note) async {
     try{
-      await FirebaseFirestore.instance.collection('notes').doc(note.id).update({
-        'title': note.title,
-        'content': note.content,
-      });
+      await FirebaseFirestore.instance
+          .collection('notes')
+          .doc(note.id)
+          .update(note.toMap());
       fetchNotes();
     } catch (e) {
       print('Error updateing document: $e');
     }
   }
 
-  void addNote (Note note) {
-    _notes.add(note);
-    notifyListeners();
-  }
+
 
   void removeNoteById(String id){
     _notes.removeWhere((note) => note.id == id);

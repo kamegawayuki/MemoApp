@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Note {
-  final String id;
-  final String title;
-  final String content;
+  String id;
+  String title;
+  String content;
 
   Note ({
     required this.id,
@@ -19,5 +19,14 @@ class Note {
       content: doc['content']
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+    };
+  }
+
 }
 
