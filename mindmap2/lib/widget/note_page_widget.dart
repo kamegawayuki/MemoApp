@@ -3,6 +3,8 @@ import 'package:mindmap2/model/note.dart';
 import 'package:mindmap2/note_card.dart';
 import 'package:mindmap2/notes_grid.dart';
 import 'package:mindmap2/provider/note_provider.dart';
+import 'package:mindmap2/widget/child_note_card.dart';
+import 'package:mindmap2/widget/note_card_container.dart';
 import 'package:mindmap2/widget/note_detail_overlay.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +20,7 @@ class _NotesPageState extends State<NotesPage>{
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<NoteProvider>(context, listen: false).fetchNotes();
+      Provider.of<NoteProvider>(context, listen: false).fetchNotesAndRelationsFromFB();
     });
   }
 
@@ -46,10 +48,18 @@ class _NotesPageState extends State<NotesPage>{
   Widget build(BuildContext context){
     return Consumer<NoteProvider>(
       builder: (context, noteProvider, child) {
-        List<NoteCard> noteList = [];
+        List<NoteCardContainer> noteList = [];
         for (var note in noteProvider.notes) {
-          noteList.add(NoteCard(note: note, noteProvider: noteProvider,));
+          noteList.add(NoteCardContainer(note: note, noteProvider: noteProvider,));
         }
+        List<ChildNoteCard> childNoteCardList  = [];
+        if (noteProvider.selectedNote != null) {
+          List<Note> childNoteList = noteProvider.getChildNotes(noteProvider.selectedNote!.id);
+          for (var childNote in childNoteList) {
+            childNoteCardList.add(ChildNoteCard(note: childNote, noteProvider: noteProvider));
+          }
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text('tektoApp'),
@@ -85,7 +95,10 @@ class _NotesPageState extends State<NotesPage>{
                 Positioned.fill(
                     child: Container(
                       color: Colors.black54,
-                      child: NoteDetailOverlay(note: noteProvider.selectedNote!),
+                      child: NoteDetailOverlay(
+                        note: noteProvider.selectedNote!,
+                        childNoteCardList: childNoteCardList,
+                      ),
                     )
                 )
             ],

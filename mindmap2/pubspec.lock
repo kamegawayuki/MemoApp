@@ -66,7 +66,7 @@ packages:
     source: hosted
     version: "3.12.5"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -118,6 +118,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_draggable_gridview:
+    dependency: "direct main"
+    description:
+      name: flutter_draggable_gridview
+      sha256: "558747591fc3fccb1ecf97f8f540a160b1712b4ab12d57f3ce961d1190487164"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.12"
   flutter_lints:
     dependency: "direct dev"
     description:
